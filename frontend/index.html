@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e7f3ff;
+        border-radius: 4px;
+        display: none;
+      }
+      .result.show {
+        display: block;
+      }
+      .result.error {
+        background-color: #ffe7e7;
+      }
+      .short-url {
+        font-weight: bold;
+        color: #007bff;
+        word-break: break-all;
+      }
+      .error-message {
+        color: #d8000c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>URL Shortener</h1>
+      <p>Enter a long URL below to create a shortened version:</p>
+
+      <input
+        type="text"
+        id="longUrl"
+        placeholder="https://example.com/very/long/url/path"
+        aria-label="Long URL input"
+      />
+
+      <button id="shortenBtn" onclick="shortenUrl()">Shorten URL</button>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <script>
+      // Replace this with your actual API Gateway invoke URL
+      const API_ENDPOINT =
+        "https://r6rxczcb99.execute-api.eu-west-2.amazonaws.com/shorten";
+
+      async function shortenUrl() {
+        const longUrlInput = document.getElementById("longUrl");
+        const resultDiv = document.getElementById("result");
+        const button = document.getElementById("shortenBtn");
+
+        // Get the long URL from input
+        const longUrl = longUrlInput.value.trim();
+
+        // Validate input
+        if (!longUrl) {
+          showError("Please enter a URL");
+          return;
+        }
+
+        // Basic URL validation
+        if (!isValidUrl(longUrl)) {
+          showError(
+            "Please enter a valid URL (must start with http:// or https://)",
+          );
+          return;
+        }
+
+        // Disable button and show loading state
+        button.disabled = true;
+        button.textContent = "Shortening...";
+        resultDiv.className = "result";
+        resultDiv.textContent = "";
+
+        try {
+          // Make POST request to API Gateway
+          const response = await fetch(API_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ longUrl: longUrl }),
+          });
+
+          // Parse the response
+          const data = await response.json();
+
+          if (response.ok) {
+            // Success - display the short URL
+            showSuccess(data.shortCode, data.shortUrl);
+          } else {
+            // API returned an error
+            showError(data.error || "Failed to shorten URL");
+          }
+        } catch (error) {
+          // Network error or other issue
+          console.error("Error:", error);
+          showError("Failed to connect to the server. Please try again.");
+        } finally {
+          // Re-enable button
+          button.disabled = false;
+          button.textContent = "Shorten URL";
+        }
+      }
+
+      function showSuccess(shortCode, shortUrl) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.className = "result show";
+        resultDiv.innerHTML = `
+                <p>✅ Success! Your shortened URL:</p>
+                <a href="${shortUrl}" class="short-url" target="_blank">${shortUrl}</a>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    Short code: <strong>${shortCode}</strong>
+                </p>
+            `;
+      }
+
+      function showError(message) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.className = "result show error";
+        resultDiv.innerHTML = `
+                <p class="error-message">❌ ${message}</p>
+            `;
+      }
+
+      function isValidUrl(string) {
+        try {
+          const url = new URL(string);
+          return url.protocol === "http:" || url.protocol === "https:";
+        } catch (_) {
+          return false;
+        }
+      }
+    </script>
+  </body>
+</html>
