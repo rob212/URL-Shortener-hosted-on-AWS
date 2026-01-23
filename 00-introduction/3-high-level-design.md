@@ -27,7 +27,7 @@ We need two API endpoints:
 1. **URL shortener** - To create a new short URL, a client will send a POST request containing one parameter; the original long URL.
 
 ```
-POST api/v1/data/shorten
+POST api/v1/shorten
 
 - request parameter: {longUrl: longURLString}
 - return: shortURL
@@ -36,15 +36,11 @@ POST api/v1/data/shorten
 2. **URL redirecting** - To redirect a short URL to the corresponding long URL, a client sends a GET request.
 
 ```
-GET api/v1/shortURL
+GET api/v1/{shortCode}
 
 - return longURL for HTTP redirection
 ```
 
-## URL redirecting
-
-Figure 1 shows what happens when you enter a shorturl into the browser. Once the server receives a shorturl request, it changes the short URL to the long URL with an HTTP `301 redirect`.
-
 ## AWS Architecture
 
-![AWS Architecture](./docs/url_shortener_serverless_architecture.svg)
+![AWS Architecture](./../docs/url_shortener_serverless_architecture.svg)

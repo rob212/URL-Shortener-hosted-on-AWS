@@ -58,7 +58,7 @@ Amazon S3 is:
 - **Block Public Access settings for this bucket**
   Keep the default 'Block _all_ public access' checked.
 
-  > ⚠️ **Note**: it is a valid options to host a static website directly from a publicly accessible S3, however, this violates AWS Burner account terms of service.
+  > ⚠️ **Note**: it is a valid options to host a static website directly from a publicly accessible S3, however, we will be taking a different approach to keep our buct private.
 
   We will thefore keep the S3 bucket that hosts our `index.html` private and make this accessible via a Cloudfront distribution in a later step.
 
