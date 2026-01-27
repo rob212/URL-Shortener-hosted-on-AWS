@@ -21,11 +21,21 @@ Work through the repository **in order**:
 
 1. Start with the introduction:
 
-   - `00-introduction/problem-statement.md`
-   - `00-introduction/learning-goals.md`
+   - `00-introduction/1-problem-statement.md`
+   - `00-introduction/2-learning-goals.md`
+   - `00-introduction/3-high-level-design.md`
 
-2. Then complete **Iteration 1**:
-   - `01-simple-s3-lambda-dynamodb/README.md`
+2. Then complete **Building our Frontend**:
+   - `01-building-our-frontend/1-building-the-website.md`
+   - `01-building-our-frontend/2-s3-bucket-web-hosting.md`
+   - `01-building-our-frontend/3-cloudfront-distribution.md`
+
+3. Finally **Building our AWS Serverless Backend**:
+   - `02-building-our-aws-serverless-backend/1-dynamodb-table.md`
+   - `02-building-our-aws-serverless-backend/2-lambda-shortener-function.md`
+   - `02-building-our-aws-serverless-backend/3-api-gateway.md`
+   - `02-building-our-aws-serverless-backend/4-connecting-frontend-backed.md`
+   - `02-building-our-aws-serverless-backend/5-lambda-for-redirection.md`
 
 Each iteration:
 
