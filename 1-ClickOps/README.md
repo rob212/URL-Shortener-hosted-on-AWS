@@ -41,8 +41,6 @@ Each iteration:
 
 - Explains the architecture
 - Walks through AWS Console setup step-by-step
-- Includes diagrams and code
-- Calls out deliberate limitations and learning trade-offs
 
 ---
 

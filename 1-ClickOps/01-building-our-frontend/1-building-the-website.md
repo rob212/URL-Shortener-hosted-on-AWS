@@ -17,7 +17,7 @@ We will create a **single static HTML page** that:
 
 There will be:
 
-- No styling
+- Limited styling
 - No frameworks
 - No build tools
 - No authentication
